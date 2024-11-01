@@ -1,0 +1,32 @@
+{
+    "name": "ocolin/pushover",
+    "description": "PHP client for Pushover API",
+    "type": "library",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ocolin/EasyEnv"
+        }
+    ],
+    "require": {
+        "ocolin/easyenv": "^1.0",
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11",
+        "phpstan/phpstan": "^1.12"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ocolin\\Pushover\\": "src/",
+            "Ocolin\\Pushover\\tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Colin Miller",
+            "email": "ocolin@cruzio.com"
+        }
+    ]
+}
