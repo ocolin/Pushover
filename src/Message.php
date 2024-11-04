@@ -21,9 +21,9 @@ class Message extends Core
     public function __construct(
         ?string $token  = null,
         ?string $url    = null,
-        string $format = 'json',
-        bool $verify = false,
-        bool $errors = false,
+         string $format = 'json',
+           bool $verify = false,
+           bool $errors = false,
     )
     {
         $allowed_formats = [ 'json', 'xml' ];

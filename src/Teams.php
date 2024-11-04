@@ -21,8 +21,8 @@ class Teams extends Core
      * @throws Exception
      */
     public function __construct(
-        ?string $token = null,
-        ?string $url = null,
+        ?string $token  = null,
+        ?string $url    = null,
          string $format = 'json',
            bool $verify = false,
            bool $errors = false,
