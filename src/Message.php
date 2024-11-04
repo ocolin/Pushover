@@ -7,9 +7,17 @@ namespace Ocolin\Pushover;
 class Message extends Core
 {
 
-/*
+/* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param string|null $token Optional API token.
+     * @param string|null $url Optional API URL.
+     * @param string $format Format of response data. XML or JSON.
+     * @param bool $verify Verify SSL cert.
+     * @param bool $errors Verify no HTTP errors.
+     * @throws \Exception
+     */
     public function __construct(
         ?string $token  = null,
         ?string $url    = null,
@@ -37,11 +45,17 @@ class Message extends Core
 /* PUSH MESSAGE
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param string $user User key of user that is sending message.
+     * @param string $message Message content itself.
+     * @param array<string, string|int|float> $options Optional parameters for message.
+     * @return object|string API response object
+     */
     public function push(
         string $user,
         string $message,
          array $options = []
-    ) : object
+    ) : object|string
     {
         $uri = 'messages.' . $this->format;
         $options = self::validate_Options( options: $options );
@@ -54,9 +68,13 @@ class Message extends Core
 
 
 
-/*
+/* VALIDATE OPTIONAL PARAMETERS
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param array<string, string|int|float> $options Array of options sent to client
+     * @return array<string, string|int|float> Filtered array of allowed clients from requested ones
+     */
     public static function validate_Options( array $options ) : array
     {
         $output = [];
@@ -70,9 +88,14 @@ class Message extends Core
         return $output;
     }
 
-/*
+
+
+/* OPTIONAL PARAMETERS
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @return string[] Array of allowed parameters.
+     */
     public static function optionalParams() : array
     {
         return [
@@ -93,26 +116,3 @@ class Message extends Core
         ];
     }
 }
-
-/**
- * POST https://api.pushover.net/1/messages.json
- *
- * REQUIRED:
- * token
- * user
- * message
- *
- * OPTIONAL:
- * attachment
- * attachment_base64
- * attachment_type
- * device
- * html
- * priority
- * sound
- * timestamp
- * title
- * ttl
- * url
- * url_title
- */

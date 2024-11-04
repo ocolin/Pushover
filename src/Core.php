@@ -9,19 +9,25 @@ use Ocolin\Env\EasyEnv;
 
 class Core
 {
+    /**
+     * @var string Format of returned API data. XML or JSON.
+     */
     public string $format = 'json';
 
+    /**
+     * @var HTTP Guzzle HTTP handler
+     */
     public HTTP $http;
 
-/*
+/* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string|null $token
-     * @param string|null $url
-     * @param string $format HTTP output format
-     * @param bool $verify
-     * @param bool $errors
+     * @param string|null $token Optional API token.
+     * @param string|null $url Optional API URL.
+     * @param string $format HTTP output format. XML or JSON.
+     * @param bool $verify Verify SSL certificate.
+     * @param bool $errors Stop on HTTP errors.
      * @throws Exception
      */
     public function __construct(
@@ -44,7 +50,7 @@ class Core
 
 
 
-/*
+/* LOAD ENVIRONMENT VARIABLES
 ----------------------------------------------------------------------------- */
 
     /**
