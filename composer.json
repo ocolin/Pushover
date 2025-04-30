@@ -2,12 +2,6 @@
     "name": "ocolin/pushover",
     "description": "PHP client for Pushover API",
     "type": "library",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ocolin/EasyEnv"
-        }
-    ],
     "require": {
         "ocolin/easyenv": "^1.0",
         "guzzlehttp/guzzle": "^7.9"

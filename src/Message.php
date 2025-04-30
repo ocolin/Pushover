@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
 
+use Exception;
+
 class Message extends Core
 {
 
@@ -16,7 +18,7 @@ class Message extends Core
      * @param string $format Format of response data. XML or JSON.
      * @param bool $verify Verify SSL cert.
      * @param bool $errors Verify no HTTP errors.
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(
         ?string $token  = null,
