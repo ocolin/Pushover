@@ -6,132 +6,135 @@ namespace Ocolin\Pushover;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use Ocolin\GlobalType\GT;
 
 class HTTP
 {
     /**
-     * @var string API authentication token.
-     */
-    public string $token;
-
-    /**
-     * @var string Base URL of API server.
-     */
-    public string $url;
-
-    /**
-     * @var string API output format. XML or JSON.
-     */
-    public string $format = 'json';
-
-    /**
      * @var Client Guzzle HTTP client.
      */
-    public Client $client;
+    private Client $client;
+
+    /**
+     * @var string API auth token for app.
+     */
+    private string $token;
+
+    /**
+     * @var string The base URL of the API server.
+     */
+    private string $url;
+
+    /**
+     * @var string The API end point URI.
+     */
+    private string $endpoint;
+
+    /**
+     * @var string JSON or XML response.
+     */
+    private string $format;
 
 
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string|null $token Authentication token
-     * @param string|null $url Base URL for API
-     * @param string $format HTTP output format
-     * @param bool $verify
-     * @param bool $errors
+     * @param string|null $url Base URL of API server.
+     * @param string|null $token API Auth token.
+     * @param string $format JSON or XML response format.
+     * @param bool $verify Verify SSL connection.
+     * @param bool $errors Report HTTP Errors.
+     * @param int $timeout HTTP Timeout.
      */
     public function __construct(
-        ?string $token  = null,
-        ?string $url    = null,
+        ?string $url,
+        ?string $token,
          string $format = 'json',
-           bool $verify = false,
+           bool $verify = true,
            bool $errors = false,
+            int $timeout = 20
     )
     {
-        $this->token = $token   ?? $_ENV['PUSHOVER_API_TOKEN'];
-        $this->url   = $url     ?? $_ENV['PUSHOVER_API_URL'];
+        $this->token  = $token ?? GT::envString( name: 'PUSHOVER_API_TOKEN' );
+        $this->url    = $url   ?? GT::envString( name: 'PUSHOVER_API_URL' );
         $this->format = $format;
 
         $this->client = new Client([
-            'base_uri'    => $this->url,
-            'verify'      => $verify,
-            'http_errors' => $errors
+            'base_uri'        => $this->url,
+            'verify'          => $verify,
+            'http_errors'     => $errors,
+            'timeout'         => $timeout,
+            'connect_timeout' => $timeout,
+            'headers'         => [
+                'Content-Type'  => 'application/json; charset=utf-8',
+                'User-Agent'    => 'Pushover PHP Client 2.0',
+            ]
         ]);
     }
 
 
 
-/* GET METHOD
+/* GET REQUEST
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $uri URI of API call
-     * @param array<string, string|int|float> $params Query parameters for API call
-     * @return Response API data object
+     * @param string $uri API end point URI.
+     * @param string[]|object $query URI query parameters.
+     * @return Response Response object from API.
+     * @throws GuzzleException
      */
-    public function get( string $uri, array $params = [] ) : Response
+    public function get( string $uri, array|object $query = [] ): Response
     {
-        $uri = ltrim( string: $uri, characters: '/' );
-        $params['token']  = $this->token;
-        $options['query'] = Query::build( $params );
-
-        try {
-            $response = $this->client->request(
-                 method: 'GET',
-                    uri: $uri,
-                options: $options
-            );
-        } catch (GuzzleException $e) {
-            return self::error( message: $e->getMessage());
+        $this->endpoint = $uri;
+        $this->trim_Path();
+        if( gettype( $query ) === 'object' ) {
+            $query = (array)$query;
         }
+        echo $this->token;
+        $query['token'] = $this->token;
 
-        return $this->return_Results( response: $response );
+        return $this->format_Response( response: $this->client->get(
+            uri: $this->endpoint, options: ['query' => $query ]
+        ));
     }
 
 
 
-/* POST METHOD
+/* POST REQUEST
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $uri URI of API call
-     * @param array<string, string|int|float>|object $params Parameters for body of API call
-     * @return Response API data object
+     * @param string $uri End point URI.
+     * @param array<string, string|int|float>|object $params POST parameters for request body.
+     * @return Response Response object from API.
+     * @throws GuzzleException
      */
-
-    public function post( string $uri, array|object $params ) : Response
+    public function post( string $uri, array|object $params = [] ): Response
     {
-        $uri = ltrim( string: $uri, characters: '/' );
-        $params += [ 'token' => $this->token ];
-        $options['headers'] = [ 'content-type' => 'application/json' ];
-        $options['body']  = json_encode( $params );
-
-        try {
-            $response = $this->client->request(
-                 method: 'POST',
-                    uri: $uri,
-                options: $options
-            );
-        } catch (GuzzleException $e) {
-            return self::error( message: $e->getMessage());
+        $this->endpoint = $uri;
+        $this->trim_Path();
+        if( gettype( $params ) === 'object' ) {
+            $params = (array)$params;
         }
+        $params['token'] = $this->token;
 
-        return $this->return_Results( response: $response );
+        return $this->format_Response( response: $this->client->post(
+            uri: $this->endpoint, options: ['json' => $params ]
+        ));
     }
 
 
-
-/* FORMAT API HTTP OUTPUT RESULTS
+/*
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param ResponseInterface $response Guzzle response object
-     * @return Response Formatted Pushover response object
+     * @param ResponseInterface $response
+     * @return Response
      */
-    private function return_Results( ResponseInterface $response ) : Response
+    public function format_Response( ResponseInterface $response ): Response
     {
         $output = new Response();
         $output->status         = $response->getStatusCode();
@@ -148,24 +151,21 @@ class HTTP
 
 
 
-/* GENERATE ERROR OBJECT
+/* REMOVE DUPLICATE SLASHES IN URL
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $message Error message to display
-     * @return Response Error response object
+     * If both the base URL and the end point path have root slash, remove
+     * the one from end point to eliminate a double slash in the final URL.
+     *
      */
-    public static function error( string $message ) : Response
+    private function trim_Path() : void
     {
-        $o = new Response();
-        $o->status = 400;
-        $o->status_message = 'Exception error message';
-
-        $body = new stdClass();
-        $body->status = 0;
-        $body->errors = [ $message ];
-        $o->body = $body;
-
-        return $o;
+        if(
+            str_starts_with( haystack: $this->endpoint, needle: '/' ) AND
+            str_ends_with( haystack: $this->url, needle: '/' )
+        ) {
+            $this->endpoint =  trim( string: $this->endpoint, characters: '/' );
+        }
     }
 }

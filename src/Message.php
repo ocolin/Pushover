@@ -4,117 +4,63 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
 
-use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 
-class Message extends Core
+readonly class Message
 {
 
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
-    /**
-     * @param string|null $token Optional API token.
-     * @param string|null $url Optional API URL.
-     * @param string $format Format of response data. XML or JSON.
-     * @param bool $verify Verify SSL cert.
-     * @param bool $errors Verify no HTTP errors.
-     * @throws Exception
-     */
-    public function __construct(
-        ?string $token  = null,
-        ?string $url    = null,
-         string $format = 'json',
-           bool $verify = false,
-           bool $errors = false,
-    )
-    {
-        $allowed_formats = [ 'json', 'xml' ];
-        if( in_array( $format, $allowed_formats )) {
-            $this->format = $format;
-        }
-
-        parent::__construct(
-            token: $token,
-            url: $url,
-            format: $this->format,
-            verify: $verify,
-            errors: $errors
-        );
-    }
+    public function __construct( private Client $client ) {}
 
 
-
-/* PUSH MESSAGE
+/*
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $user User key of user that is sending message.
-     * @param string $message Message content itself.
-     * @param array<string, string|int|float> $options Optional parameters for message.
-     * @return object|string API response object
+     * @param string $user User or group to send message to.
+     * @param string $message Message to send.
+     * @param array<string, string|int|float> $params Optional parameters.
+     * @return object|string
+     * @throws GuzzleException
      */
     public function push(
         string $user,
         string $message,
-         array $options = []
-    ) : object|string
+         array $params = []
+    ) : object | string
     {
-        $uri = 'messages.' . $this->format;
-        $options = self::validate_Options( options: $options );
-        $options['user']    = $user;
-        $options['message'] = $message;
-        $output = $this->http->post( uri: $uri, params: $options );
+        $uri = 'messages.' . $this->client->format;
+        $params['user']    = $user;
+        $params['message'] = $message;
 
-        return $output->body;
+        return $this->client->http->post( uri: $uri, params: $params )->body;
     }
 
 
-
-/* VALIDATE OPTIONAL PARAMETERS
+/* GET MESSAGES
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param array<string, string|int|float> $options Array of options sent to client
-     * @return array<string, string|int|float> Filtered array of allowed clients from requested ones
+     * Download all existing messages waiting for a device.
+     *
+     * @param string $secret Secret of user.
+     * @param string $device_id ID of user's device to get messages for.
+     * @return object|string API server response.
+     * @throws GuzzleException
      */
-    public static function validate_Options( array $options ) : array
+    public function get(
+        string $secret,
+        string $device_id
+    ) : object | string
     {
-        $output = [];
-        foreach( $options as $option => $value )
-        {
-            if( in_array( $option, self::optionalParams() )) {
-                $output[$option] = $value;
-            }
-        }
-
-        return $output;
-    }
-
-
-
-/* OPTIONAL PARAMETERS
------------------------------------------------------------------------------ */
-
-    /**
-     * @return string[] Array of allowed parameters.
-     */
-    public static function optionalParams() : array
-    {
-        return [
-            'attachment',
-            'attachment_base64',
-            'attachment_type',
-            'device',
-            'html',
-            'priority',
-            'sound',
-            'timestamp',
-            'title',
-            'ttl',
-            'url',
-            'url_title',
-            'expire',
-            'retry'
+        $uri = 'messages.' . $this->client->format;
+        $query = [
+            'device_id' => $device_id,
+            'secret'    => $secret,
         ];
+
+        return $this->client->http->get( uri: $uri, query: $query )->body;
     }
 }

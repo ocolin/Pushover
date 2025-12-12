@@ -4,61 +4,51 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
 
-use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 
-class Teams extends Core
+readonly class Teams
 {
 
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
-    /**
-     * @param string|null $token Optional API auth token.
-     * @param string|null $url Optional API URL.
-     * @param string $format API output format. XML or JSON.
-     * @param bool $verify Verify SSL certificate.
-     * @param bool $errors Check for HTTP errors.
-     * @throws Exception
-     */
-    public function __construct(
-        ?string $token  = null,
-        ?string $url    = null,
-         string $format = 'json',
-           bool $verify = false,
-           bool $errors = false,
-    ) {
-        $allowed_formats = ['json', 'xml'];
-        if (in_array($format, $allowed_formats)) {
-            $this->format = $format;
-        }
-
-        parent::__construct(
-             token: $token,
-               url: $url,
-            format: $this->format,
-            verify: $verify,
-            errors: $errors
-        );
-    }
+    public function __construct( private Client $client ) {}
 
 
-
-/* ADD USER
+/* SHOW TEAMS
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $email Email of user to add to team.
-     * @param array<string, string|int|float> $params Optional parameters for user.
-     * @return object|string API response object
+     * To show your Team's information including users
+     *
+     * @return object|string API server response.
+     * @throws GuzzleException
      */
-    public function addUser( string $email, array $params = [] ) : object|string
+    public function show() : object | string
     {
-        $uri = 'teams/add_user.' . $this->format;
-        $params = self::validate_Options( options: $params );
-        $params['email'] = $email;
-        $output = $this->http->post( uri: $uri, params: $params );
+        $uri = 'teams.' . $this->client->format;
 
-        return $output->body;
+        return $this->client->http->get( uri: $uri )->body;
+    }
+
+
+/* ADD USER TO TEAM
+----------------------------------------------------------------------------- */
+
+    /**
+     * To add a user to your Team
+     *
+     * @param string $email Email address of team member to add.
+     * @param array<string, string|int|float> $params Optional parameters.
+     * @return object|string
+     * @throws GuzzleException
+     */
+    public function add( string $email, array $params = [] ) : object | string
+    {
+        $uri = 'teams/add_user.' . $this->client->format;
+        $params[ 'email' ] = $email;
+
+        return $this->client->http->post( uri: $uri, params: $params )->body;
     }
 
 
@@ -66,55 +56,18 @@ class Teams extends Core
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string $email Email address of user to remove.
-     * @return object|string API response object
+     * To remove a user from your Team (without deleting the user's Pushover
+     * account) and remove them from any team delivery groups.
+     *
+     * @param string $email Email address of member to remove from team.
+     * @return object|string API server response.
+     * @throws GuzzleException
      */
-    public function removeUser( string $email ) : object|string
+    public function remove( string $email ) : object | string
     {
-        $uri = 'teams/remove_user.' . $this->format;
-        $output = $this->http->post( uri: $uri, params: [ 'email' => $email ] );
+        $uri = 'teams/remove_user.' . $this->client->format;
+        $params[ 'email' ] = $email;
 
-        return $output->body;
-    }
-
-
-
-/* VALIDATE OPTIONAL PARAMETERS
------------------------------------------------------------------------------ */
-
-    /**
-     * @param array<string, string|int|float> $options Array of options sent to client
-     * @return array<string, string|int|float> Filtered array of allowed clients from requested ones
-     */
-    public static function validate_Options( array $options ) : array
-    {
-        $output = [];
-        foreach( $options as $option => $value )
-        {
-            if( in_array( $option, self::optionalParams() )) {
-                $output[$option] = $value;
-            }
-        }
-
-        return $output;
-    }
-
-
-
-/* LIST OF OPTIONAL PARAMETERS
------------------------------------------------------------------------------ */
-
-    /**
-     * @return string[] Array of optional user parameters.
-     */
-    public static function optionalParams() : array
-    {
-        return [
-            'name',     // the user's full name
-            'password', // the user's password if assigning one to the user
-            'instant',  // a string value of true will include an Instant Login link
-            'admin',    // true will add this user to the team as an administrator
-            'group'     // add this user to another Delivery Group
-        ];
+        return $this->client->http->post( uri: $uri, params: $params )->body;
     }
 }
