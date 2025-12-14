@@ -2,6 +2,14 @@
 
 A PHP client for Pushover API. This is a work in progress, adding testing as endpoints are used and time allows. Each endpoint is labeled whether it has been tested yet or not in this document.
 
+## Installation
+
+Easily install using composer.
+
+```
+composer require ocolin/pushover
+```
+
 ## Environment Variables
 
 There are two environment variables that can be used instead of arguments when instantiating a new Client object. See .env.example file.
@@ -12,11 +20,14 @@ There are two environment variables that can be used instead of arguments when i
 
 ## Instantiating an API client.
 
-### Arguments
+### Required Arguments
 
-- token - API authentication token. Defaults to environment variable.
-- format - Output format JSON or XML. Defaults to JSON.
-- verify - Verify SSL connection to API server. Defaults to true.
+- token   - API authentication token. Defaults to environment variable.
+
+### Optional arguments
+
+- format  - Output format JSON or XML. Defaults to JSON.
+- verify  - Verify SSL connection to API server. Defaults to true.
 - timeout - Set HTTP timeout. Defaults to 20 seconds.
 
 ### Example - Using only environment variables
