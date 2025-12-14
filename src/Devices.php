@@ -15,7 +15,7 @@ readonly class Devices
     /**
      * @param Client $client Pushover PHP Client.
      */
-    public function __construct( private Client $client) {}
+    public function __construct( private Client $client ) {}
 
 
 /* REGISTER A DEVICE

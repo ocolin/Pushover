@@ -13,22 +13,25 @@ class Client
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param string|null $token API auth token.
+     * @param string $format JSON or XML format to be returned.
+     * @param bool $verify Verify SSL connection. Default true.
+     * @param int $timeout HTTP timeout. 20 second default.
+     */
     public function __construct(
-        ?string $url     = null,
         ?string $token   = null,
          string $format  = 'json',
            bool $verify  = true,
-           bool $errors  = false,
             int $timeout = 20
     )
     {
-        $this->format = $format;
+        $this->format = in_array( needle: $format, haystack: [ 'json', 'xml' ])
+            ? $format : 'json';
         $this->http = new HTTP(
-                url: $url,
               token: $token,
-             format: $format,
+             format: $this->format,
              verify: $verify,
-             errors: $errors,
             timeout: $timeout
         );
     }

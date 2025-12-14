@@ -8,25 +8,21 @@ There are two environment variables that can be used instead of arguments when i
 
 ```
 - $_ENV['PUSHOVER_API_TOKEN'] - API Authentication token.
-- $_ENV['PUSHOVER_API_URL'] - URL of API server.
 ```
 
 ## Instantiating an API client.
 
 ### Arguments
 
-- url - URL of API server. Defaults to environment variable.
 - token - API authentication token. Defaults to environment variable.
 - format - Output format JSON or XML. Defaults to JSON.
 - verify - Verify SSL connection to API server. Defaults to true.
-- error - Report HTTP errors. Defaults to false.
 - timeout - Set HTTP timeout. Defaults to 20 seconds.
 
 ### Example - Using only environment variables
 
 ```php
 
-$_ENV['PUSHOVER_API_URL'] = 'https://api.pushover.net/1/';
 $_ENV['PUSHOVER_API_TOKEN'] = 'yourauthtokenhere';
 
 $client = new Ocolin\Pushover\Client();
@@ -37,11 +33,9 @@ $client = new Ocolin\Pushover\Client();
 
 ```php
 $client = new Ocolin\Pushover\Client(
-       url: 'https://api.pushover.net/1/',
      token: 'yourauthtokenhere',
     format: 'json',
     verify: true,
-    errors: false,
     timeout: 20
 );
 ```

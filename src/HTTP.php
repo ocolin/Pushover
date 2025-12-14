@@ -25,11 +25,6 @@ class HTTP
     private string $token;
 
     /**
-     * @var string The base URL of the API server.
-     */
-    private string $url;
-
-    /**
      * @var string The API end point URI.
      */
     private string $endpoint;
@@ -39,37 +34,33 @@ class HTTP
      */
     private string $format;
 
+    private const API_URL = 'https://api.pushover.net/1/';
+
 
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param string|null $url Base URL of API server.
      * @param string|null $token API Auth token.
      * @param string $format JSON or XML response format.
      * @param bool $verify Verify SSL connection.
-     * @param bool $errors Report HTTP Errors.
      * @param int $timeout HTTP Timeout.
      */
     public function __construct(
-        ?string $url,
         ?string $token,
          string $format = 'json',
            bool $verify = true,
-           bool $errors = false,
             int $timeout = 20
     )
     {
         $this->token  = $token ?? GT::envString( name: 'PUSHOVER_API_TOKEN' );
-        $this->url    = $url
-            ?? GT::envStringNull( name: 'PUSHOVER_API_URL' )
-            ?? 'https://api.pushover.net/1/';
+
         $this->format = $format;
 
         $this->client = new Client([
-            'base_uri'        => $this->url,
+            'base_uri'        => self::API_URL,
             'verify'          => $verify,
-            'http_errors'     => $errors,
+            'http_errors'     => false,
             'timeout'         => $timeout,
             'connect_timeout' => $timeout,
             'headers'         => [
@@ -94,9 +85,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $query ) === 'object' ) {
-            $query = (array)$query;
-        }
+        if( gettype( $query ) === 'object' ) { $query = (array)$query; }
         if( empty( $query['token'])) { $query['token'] = $this->token; }
 
         return $this->format_Response( response: $this->client->get(
@@ -119,9 +108,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $params ) === 'object' ) {
-            $params = (array)$params;
-        }
+        if( gettype( $params ) === 'object' ) { $params = (array)$params; }
         $params['token'] = $this->token;
 
         return $this->format_Response( response: $this->client->post(
@@ -145,9 +132,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $params ) === 'object' ) {
-            $params = (array)$params;
-        }
+        if( gettype( $params ) === 'object' ) { $params = (array)$params; }
         $params['token'] = $this->token;
 
         if( empty( $params['attachment'])) {
@@ -214,7 +199,7 @@ class HTTP
     {
         if(
             str_starts_with( haystack: $this->endpoint, needle: '/' ) AND
-            str_ends_with( haystack: $this->url, needle: '/' )
+            str_ends_with( haystack: self::API_URL, needle: '/' )
         ) {
             $this->endpoint =  trim( string: $this->endpoint, characters: '/' );
         }
