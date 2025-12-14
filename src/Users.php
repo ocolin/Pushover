@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Pushover API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 2.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
@@ -22,6 +31,8 @@ readonly class Users
 ----------------------------------------------------------------------------- */
 
     /**
+     * Validate a user.
+     *
      * @param string|null $device Optional device ID to check.
      * @return object|string API response body.
      * @throws GuzzleException
@@ -34,6 +45,7 @@ readonly class Users
 
         return $this->client->http->post( uri: $uri, params: $options )->body;
     }
+
 
 
 /* LOGIN USER

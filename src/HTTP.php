@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Pushover API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 2.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
@@ -76,6 +85,8 @@ class HTTP
 ----------------------------------------------------------------------------- */
 
     /**
+     * Send GET request to server.
+     *
      * @param string $uri API end point URI.
      * @param string[]|object $query URI query parameters.
      * @return Response Response object from API.
@@ -99,6 +110,8 @@ class HTTP
 ----------------------------------------------------------------------------- */
 
     /**
+     * Send POST request to server.
+     *
      * @param string $uri End point URI.
      * @param array<string, string|int|float>|object $params POST parameters for request body.
      * @return Response Response object from API.
@@ -122,6 +135,8 @@ class HTTP
 ----------------------------------------------------------------------------- */
 
     /**
+     * Send multipart POST message to server for image attachments.
+     *
      * @param string $uri API endpoint URI.
      * @param array<string, string|int|float>|object $params POST parameters to send.
      * @return Response API server response.
@@ -167,6 +182,8 @@ class HTTP
 ----------------------------------------------------------------------------- */
 
     /**
+     * Format Guzzle HTTP response to an object.
+     *
      * @param ResponseInterface $response Guzzle HTTP response.
      * @return Response Formatted API response.
      */

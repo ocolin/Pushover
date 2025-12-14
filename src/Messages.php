@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Pushover API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 2.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
@@ -23,6 +32,8 @@ readonly class Messages
 ----------------------------------------------------------------------------- */
 
     /**
+     * Push a message to a user or group.
+     *
      * @param string $user User or group to send message to.
      * @param string $message Message to send.
      * @param array<string, string|int|float> $params Optional parameters.

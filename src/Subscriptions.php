@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Pushover API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 2.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
@@ -22,6 +31,8 @@ readonly class Subscriptions
 ----------------------------------------------------------------------------- */
 
     /**
+     * Applications that formerly collected Pushover user keys are encouraged to migrate to subscription keys.
+     *
      * @param string $subscription Your subscription code.
      * @param string $user User's Pushover user key.
      * @param string|null $device_name A user's device name that the

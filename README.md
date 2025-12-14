@@ -7,12 +7,12 @@ A PHP client for Pushover API. This is a work in progress, adding testing as end
 Easily install using composer.
 
 ```
-composer require ocolin/pushover
+composer require ocolin/pushover --no-dev
 ```
 
 ## Environment Variables
 
-There are two environment variables that can be used instead of arguments when instantiating a new Client object. See .env.example file.
+There is an environment variable that can be used instead of as an argument when instantiating a new Client object. See .env.example file.
 
 ```
 - $_ENV['PUSHOVER_API_TOKEN'] - API Authentication token.
@@ -44,9 +44,9 @@ $client = new Ocolin\Pushover\Client();
 
 ```php
 $client = new Ocolin\Pushover\Client(
-     token: 'yourauthtokenhere',
-    format: 'json',
-    verify: true,
+      token: 'yourauthtokenhere',
+     format: 'json',
+     verify: true,
     timeout: 20
 );
 ```
@@ -58,6 +58,19 @@ There are multiple Pushover APIs each with their own end points. It uses the fol
 ```
 {client}->{api}->{endpoint}({arguments})
 ```
+
+### TOC
+
+- [Devices](#Devices)
+- [Glances](#Glances)
+- [Groups](#Groups)
+- [Licenses](#Licenses)
+- [Message](#Message)
+- [Receipts](#Receipts)
+- [Subscriptions](#Subscriptions)
+- [Teams](#Teams)
+- [Sounds](#Sounds)
+- [Apps](#Apps)
 
 ### Devices
 

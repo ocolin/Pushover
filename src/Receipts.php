@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Pushover API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 2.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
@@ -22,6 +31,8 @@ readonly class Receipts
 ----------------------------------------------------------------------------- */
 
     /**
+     * Get a specific receipt.
+     *
      * @param string $receipt ID of the receipt to check.
      * @return object|string Status of task receipt belongs to.
      * @throws GuzzleException
@@ -39,6 +50,8 @@ readonly class Receipts
 ----------------------------------------------------------------------------- */
 
     /**
+     * Cancel an emergency message push.
+     *
      * @param string $receipt ID of receipt for task to cancel.
      * @return object|string Response from API server.
      * @throws GuzzleException
@@ -56,6 +69,8 @@ readonly class Receipts
 ----------------------------------------------------------------------------- */
 
     /**
+     * Cancel an emergency message by a tag.
+     *
      * @param string $tag Tag of task(s) to cancel.
      * @return object|string API server response.
      * @throws GuzzleException
@@ -72,6 +87,8 @@ readonly class Receipts
 ----------------------------------------------------------------------------- */
 
     /**
+     * Send an acknowledgement of an emergency push from a device.
+     *
      * @param string $receipt Receipt ID to acknowledge.
      * @param string $secret User session secret.
      * @return object|string API server response.

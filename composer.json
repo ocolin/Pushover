@@ -3,11 +3,12 @@
     "description": "PHP client for Pushover API",
     "type": "library",
     "require": {
-        "ocolin/easyenv": "^2.8",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.10",
         "ocolin/global-type": "^1.4"
     },
     "require-dev": {
+        "ocolin/easyenv": "^2.8",
         "phpunit/phpunit": "^12.5",
         "phpstan/phpstan": "^2.1"
     },
@@ -23,5 +24,6 @@
             "name": "Colin Miller",
             "email": "ocolin@cruzio.com"
         }
-    ]
+    ],
+    "homepage": "https://github.com/ocolin/Pushover"
 }

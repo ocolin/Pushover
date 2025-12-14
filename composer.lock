@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02dfd05b693dca4337aaf0e5adc63e9a",
+    "content-hash": "babbea89aa2343f4957f9fb98a646480",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -330,53 +330,6 @@
                 }
             ],
             "time": "2025-08-23T21:21:41+00:00"
-        },
-        {
-            "name": "ocolin/easyenv",
-            "version": "2.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ocolin/EasyEnv.git",
-                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ocolin/EasyEnv/zipball/5feb32669ff399d4c6709dd65502dbc1a55b627a",
-                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*"
-            },
-            "require-dev": {
-                "php": ">=8.2",
-                "phpcompatibility/php-compatibility": "^9.3",
-                "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^12.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Ocolin\\EasyEnv\\": "src/",
-                    "Ocolin\\EasyEnv\\Tests\\": "tests"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Colin Miller",
-                    "email": "ocolin@cruzio.com"
-                }
-            ],
-            "description": "Very simple tool to load env variables from file",
-            "support": {
-                "issues": "https://github.com/ocolin/EasyEnv/issues",
-                "source": "https://github.com/ocolin/EasyEnv/tree/2.8"
-            },
-            "time": "2025-11-11T17:29:15+00:00"
         },
         {
             "name": "ocolin/global-type",
@@ -813,6 +766,53 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
             },
             "time": "2025-12-06T11:56:16+00:00"
+        },
+        {
+            "name": "ocolin/easyenv",
+            "version": "2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ocolin/EasyEnv.git",
+                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ocolin/EasyEnv/zipball/5feb32669ff399d4c6709dd65502dbc1a55b627a",
+                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*"
+            },
+            "require-dev": {
+                "php": ">=8.2",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ocolin\\EasyEnv\\": "src/",
+                    "Ocolin\\EasyEnv\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Miller",
+                    "email": "ocolin@cruzio.com"
+                }
+            ],
+            "description": "Very simple tool to load env variables from file",
+            "support": {
+                "issues": "https://github.com/ocolin/EasyEnv/issues",
+                "source": "https://github.com/ocolin/EasyEnv/tree/2.8"
+            },
+            "time": "2025-11-11T17:29:15+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1321,16 +1321,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.2",
+            "version": "12.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "06713c2633d6d832f2fe98a70511ecaa7cb92c1a"
+                "reference": "6dc2e076d09960efbb0c1272aa9bc156fc80955e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/06713c2633d6d832f2fe98a70511ecaa7cb92c1a",
-                "reference": "06713c2633d6d832f2fe98a70511ecaa7cb92c1a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6dc2e076d09960efbb0c1272aa9bc156fc80955e",
+                "reference": "6dc2e076d09960efbb0c1272aa9bc156fc80955e",
                 "shasum": ""
             },
             "require": {
@@ -1398,7 +1398,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.3"
             },
             "funding": [
                 {
@@ -1422,7 +1422,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-08T07:22:32+00:00"
+            "time": "2025-12-11T08:52:59+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2429,7 +2429,9 @@
     "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": "^8.2"
+    },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
