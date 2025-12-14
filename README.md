@@ -87,6 +87,21 @@ https://pushover.net/api/glances
 
 #### Update (Untested)
 
+Update your widget.
+
+Parameters:
+
+- user (required) - the user's Pushover user key
+- device (optional) a user's device name to restrict messages to the widget on that device, otherwise leave blank to send messages to all available widgets of that user
+
+Updatable fields:
+
+- title (100 characters) - a description of the data being shown, such as "Widgets Sold"
+- text (100 characters) - the main line of data, used on most screens
+- subtext (100 characters) - a second line of data
+- count (integer, may be negative) - shown on smaller screens; useful for simple counts
+- percent (integer 0 through 100, inclusive) - shown on some screens as a progress bar/circle
+
 ```php
 $output = $client->glances->update(
     user: 'KJHjdk8h9dsf',
@@ -100,6 +115,12 @@ https://pushover.net/api/groups
 
 #### Create (Tested)
 
+Create a new group. Key will be provided in response.
+
+Parameters:
+
+- name (required) - the group's name
+
 ```php
 $output = $client->groups->create(
     name: 'MyGroup'
@@ -109,17 +130,34 @@ $output = $client->groups->create(
 
 #### Groups (Tested)
 
+Fetch a list of groups.
+
 ```php
 $output = $client->groups->groups();
 ```
 
 #### Get (Tested)
 
+Get information on a group, including users in it.
+
+Parameters:
+
+- group - (Required) Key of group to query.
+
 ```php
 $output = $client->groups->get( group: 'kjhJHf7hJh72jh' );
 ```
 
 #### Add User (Tested)
+
+Add a user to a group.
+
+Parameters:
+
+- group (required) - Key of group to add user to
+- user (required) - The user's Pushover user key
+- device (optional) A user's device name to restrict messages to that device, otherwise leave blank to send messages to all devices of that user
+- memo (optional) A free-text memo used to associate data with the user such as their name or e-mail address, viewable through the API and the groups editor on our website (limited to 200 characters)
 
 ```php
 $output = $client->groups->addUser(
@@ -130,6 +168,14 @@ $output = $client->groups->addUser(
 
 #### Remove User (Tested)
 
+Remove a user from a group.
+
+Parameters:
+
+- group (required) - Key of group to add user to
+- user (required) - the user's Pushover user key
+- device (optional) - the device name to match for the user's group membership; if left blank, all users with the matching user key will be removed
+
 ```php
 $output = $client->groups->removeUser(
     group: 'KJHjhdfkjsd',
@@ -138,6 +184,14 @@ $output = $client->groups->removeUser(
 ```
 
 #### Disable User (Tested)
+
+Disable a user in a group.
+
+Parameters:
+
+- group (required) - Key of group to disable user in
+- user (required) - the user's Pushover user key
+- device (optional) - the device name to match for the user's group membership; if left blank, all users with the matching user key will be disabled
 
 ```php
 $output = $client->groups->disableUser(
@@ -148,6 +202,14 @@ $output = $client->groups->disableUser(
 
 #### Enable User (Tested)
 
+Enable a user in a group.
+
+Parameters:
+
+- group (required) - Key of group to enable user in
+- user (required) - the user's Pushover user key
+- device (optional) - the device name to match for the user's group membership; if left blank, all users with the matching user key will be enabled
+
 ```php
 $output = $client->groups->enableUser(
     group: 'KJHjhdfkjsd',
@@ -156,6 +218,13 @@ $output = $client->groups->enableUser(
 ```
 
 #### Rename (Tested)
+
+Change the name of a gorup.
+
+Parameters:
+
+- group (required) Key of group to modify
+- name (required) New name of group
  
 ```php
 $output = $client->groups->rename(
@@ -209,6 +278,9 @@ Optional parameters:
 - ttl - a number of seconds that the message will live, before being deleted automatically (documentation)
 - url - a supplementary URL to show with your message (documentation)
 - url_title - a title for the URL specified as the url parameter, otherwise just the URL is shown (documentation)
+- retry - For priority 2 messages, this is required. How many seconds between resending alerts.
+- expire - For priority 2 messages, this is required. How many seconds until the emergency stops alerting.
+- 
 
 #### Get (Untested)
 
@@ -223,13 +295,13 @@ $output = $client->message->get(
 
 https://pushover.net/api/receipts
 
-#### Get (Untested)
+#### Get (Tested)
 
 ```php
 $output = $client->receipts->get( receipt: 'JKHk1262jhfs' );
 ```
 
-#### Cancel (Untested)
+#### Cancel (Tested)
 
 
 An emergency-priority notification will continue to be sent to devices until it reaches its original expire value. To cancel an emergency-priority notification early, you can send a POST request to our API.
@@ -238,7 +310,7 @@ An emergency-priority notification will continue to be sent to devices until it 
 $output = $client->receipts->cancel( receipt: 'JKHk1262jhfs' );
 ```
 
-#### Cancel by tag (Untested)
+#### Cancel by tag (Tested)
 
 ```php
 $output = $client->receipts->cancelByTag( tag: 'MyTag' );
@@ -285,14 +357,33 @@ $output = $client->teams->show( team: 'kjh234he8hhj' );
 
 #### Add User (Untested)
 
+Add a user to your team.
+
+Parameters:
+
+- email (required) - the user's e-mail address
+- name (optional) - the user's full name
+- password (optional) the user's password if assigning one to the user which will not be e-mailed; if not included or left blank, a random password will be assigned to the user and e-mailed to them (in cleartext)
+- instant (optional) a string value of true will include an Instant Login link in the initial welcome e-mail to the user; Instant Login links allow the user to optionally download the Pushover app and then login to their new account without entering any credentials, and links are valid for 7 days
+- admin (optional) a string value of true will add this user to the team as an administrator
+- group (optional) by default, all users are added to your auto-updating Team Delivery Group; to add this user to another Delivery Group, put the group's name in this field (if the group does not exist, it will be created)
+
 ```php
 $output = $client->teams->add(
     email: 'test@test.com',
-    params: []
+    params: [
+        'password' => 'MyPassword'
+    ]
 );
 ```
 
 #### Remove User (Untested)
+
+Remove a user from a team.
+
+Parameters:
+
+- email (required) - the user's e-mail address
 
 ```php
 $output = $client->teams->remove(
@@ -331,12 +422,12 @@ List available alert sounds.
 $output = $client->sounds->list();
 ```
 
-### Limits
+### Apps
 
-#### Get (Tested)
+#### Limis (Tested)
 
 Get API limit information.
 
 ```php
-$output = $client->limits->get();
+$output = $client->apps->limits();
 ```

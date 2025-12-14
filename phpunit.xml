@@ -17,6 +17,7 @@
 <!--            <file>tests/LicensesTest.php</file>-->
 <!--            <file>tests/SoundsTest.php</file>-->
 <!--            <file>tests/LimitsTest.php</file>-->
+<!--            <file>tests/EmergencyTest.php</file>-->
         </testsuite>
     </testsuites>
 </phpunit>

@@ -6,7 +6,7 @@ namespace Ocolin\Pushover;
 
 use GuzzleHttp\Exception\GuzzleException;
 
-readonly class Limits
+readonly class Apps
 {
 
 /* CONSTRUCTOR
@@ -28,7 +28,7 @@ readonly class Limits
      * @return object|string API server response.
      * @throws GuzzleException
      */
-    public function get() : object | string
+    public function limits() : object | string
     {
         $uri = 'apps/limits.' . $this->client->format;
 

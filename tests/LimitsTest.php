@@ -13,8 +13,8 @@ class LimitsTest extends TestCase
 
     public function testList() : void
     {
-        $output = self::$client->limits()->get();
-        print_r( $output );
+        $output = self::$client->apps()->limits();
+        //print_r( $output );
         self::assertIsObject( $output );
         self::assertObjectHasProperty( 'status', $output );
         self::assertObjectHasProperty( 'request', $output );

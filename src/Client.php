@@ -123,8 +123,8 @@ class Client
 /* LIMIT CALLS
 ----------------------------------------------------------------------------- */
 
-    public function limits() : Limits
+    public function apps() : Apps
     {
-        return new Limits( client: $this );
+        return new Apps( client: $this );
     }
 }
