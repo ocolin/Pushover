@@ -1,204 +1,318 @@
-# Pushover
-PHP Client for PushoverAPI
+# Description
 
-## Environment variables
+A PHP client for Pushover API. This is a work in progress, adding testing as endpoints are used and time allows. Each endpoint is labeled whether it has been tested yet or not in this document.
 
-While the auth token and API URL can be supplied when creating an object, it's easiest to use environment variables. Here are the variables used.
 
-* $_ENV['PUSHOVER_API_TOKEN'] - Auth token
-* $_ENV['PUSHOVER_API_URL'] - API URL
-* $_ENV['PUSHOVER_DEFAULT_PRIORITY'] - If you want a customer priority level default
+## Environment Variables
 
-## Instantiating a class
-
-The client is set up so that if you use environment variables you don't need to specify any parameters unless you want to customize them. Under normal operating procedures you need only instantiate a class object.
-
-### Basic Instantiation
+There are two environment variables that can be used instead of arguments when instantiating a new Client object. See .env.example file.
 
 ```
-$message = new Message();
+- $_ENV['PUSHOVER_API_TOKEN'] - API Authentication token.
+- $_ENV['PUSHOVER_API_URL'] - URL of API server.
 ```
 
-### Optional Instantiation parameters
+## Instantiating an API client.
 
-* token: Authentication token.
-* url: The Pushover API URL to use.
-* format: Whether to return XML or JSON. JSON is default.
-* verify: Verify SSL certificate. Default no.
-* errors: Throwing exceptions on an HTTP protocol errors.
+### Arguments
 
-```
-$message = new Message( format: 'xml' );
-```
+- url - URL of API server. Defaults to environment variable.
+- token - API authentication token. Defaults to environment variable.
+- format - Output format JSON or XML. Defaults to JSON.
+- verify - Verify SSL connection to API server. Defaults to true.
+- error - Report HTTP errors. Defaults to false.
+- timeout - Set HTTP timeout. Defaults to 20 seconds.
 
-### Message
+### Example - Using only environment variables
 
-```
-$message = new Message();
-```
+```php
 
-#### Push
+$_ENV['PUSHOVER_API_URL'] = 'https://api.pushover.net/1/';
+$_ENV['PUSHOVER_API_TOKEN'] = 'yourauthtokenhere';
 
-Send a message to a user or group. 
-
-* user (required)
-* message (required)
-* options (optional param array)
+$client = new Ocolin\Pushover\Client();
 
 ```
-$output = $message->push( user: 'acb123', message: 'Test message' );
+
+### Example - Using constructor arguments
+
+```php
+$client = new Ocolin\Pushover\Client(
+       url: 'https://api.pushover.net/1/',
+     token: 'yourauthtokenhere',
+    format: 'json',
+    verify: true,
+    errors: false,
+    timeout: 20
+);
 ```
 
-### Groups
+## APIS
+
+There are multiple Pushover APIs each with their own end points. It uses the follwing format:
 
 ```
-$groups = new Groups();
+{client}->{api}->{endpoint}({arguments})
 ```
 
-#### Create
+### Devices
 
-Create a new group.
+#### Register (Untested)
 
-* name (Required)
-
-```
-$output = $groups->create( name: 'Bob' );
-```
-
-### listGroups
-
-List every group.
-
-* No parameters
-
-```
-$output = $groups->listGroups();
+```php
+$output = $client->devices->register(
+    secret: 'jhdD87hKjhd8h',
+      name: 'My device',
+        os: 'O'
+);
 ```
 
-#### Get
+#### Delete (Untested)
 
-Get a specific group.
-
-* group (required)
-
-```
-$output = $groups->get( group: 'abc124efc' );
-```
-
-#### addUser.
-
-Add a user to a group.
-
-* user (required)
-* group (required)
-* device (optional)
-* memo (optional)
-
-```
-$output = $groups->addUser( user: 'abc123', group: 'efg456' );
-```
-
-#### removeUser.
-
-Remove a user from a group.
-
-* user (required)
-* group (required)
-* device (optional)
-
-
-```
-$output = $groups->removeUser( user: 'abc123', group: 'efg456' );
-```
-
-#### disableUser
-
-Temporarily disable a user in a group.
-
-* user (required)
-* group (required)
-* device (optional)
-
-```
-$output = $groups->disableUser( user: 'abc123', group: 'efg456' );
-```
-
-#### enableUser
-
-Re-enable a temporarily disabled user in a group.
-
-* user (required)
-* group (required)
-* device (optional)
-
-```
-$output = $groups->enableUser( user: 'abc123', group: 'efg456' );
-```
-
-#### Rename
-
-Change the name of a group.
-
-* group (required)
-* name (required)
-
-```
-$output = $groups->rename( user: 'abc123', name: 'New Name' );
+```php
+$output = $client->devices->delete(
+    device_id: 'lkjskdjsdf',
+       secret: 'sdfgsdfgdf',
+      message: 2
+);
 ```
 
 ### Glances
 
-```
-$glances = new Glances();
-```
+https://pushover.net/api/glances
 
-#### push
+#### Update (Untested)
 
-Push a glance to users
-
-* user (required)
-* device (optional)
-* params (at least one param required)
-  * title
-  * text
-  * subtext
-  * count
-  * percent
-
-```
-$output = $glances->push( 
-    user: 'abc123', params: [ 'title' => 'test title' ]
+```php
+$output = $client->glances->update(
+    user: 'KJHjdk8h9dsf',
+    params: [ 'text' => 'Message to widget' ]
 );
 ```
 
+### Groups
+
+https://pushover.net/api/groups
+
+#### Create (Tested)
+
+```php
+$output = $client->groups->create(
+    name: 'MyGroup'
+);
+
+```
+
+#### Groups (Tested)
+
+```php
+$output = $client->groups->groups();
+```
+
+#### Get (Tested)
+
+```php
+$output = $client->groups->get( group: 'kjhJHf7hJh72jh' );
+```
+
+#### Add User (Tested)
+
+```php
+$output = $client->groups->addUser(
+    group: 'KJHjhdfkjsd',
+     user: 'gRhdnml6gsji8df'
+);
+```
+
+#### Remove User (Tested)
+
+```php
+$output = $client->groups->removeUser(
+    group: 'KJHjhdfkjsd',
+     user: 'gRhdnml6gsji8df'
+);
+```
+
+#### Disable User (Tested)
+
+```php
+$output = $client->groups->disableUser(
+    group: 'KJHjhdfkjsd',
+     user: 'gRhdnml6gsji8df'
+);
+```
+
+#### Enable User (Tested)
+
+```php
+$output = $client->groups->enableUser(
+    group: 'KJHjhdfkjsd',
+     user: 'gRhdnml6gsji8df'
+);
+```
+
+#### Rename (Tested)
+ 
+```php
+$output = $client->groups->rename(
+    group: 'KJHjhdfkjsd',
+     name: 'New Name'
+);
+```
+### Licenses
+
+https://pushover.net/api/licensing
+
+#### Assign (Untested)
+
+```php
+$output = $client->licenses->assign(
+    email: 'test@email.com'
+);
+```
+
+#### Check (Tested)
+
+```php
+$output = $client->licenses->check();
+```
+
+### Message
+
+https://pushover.net/api#messages
+
+#### Push (Tested)
+
+```php
+$output = $client->message->push(
+       user: 'kjhs6fjhk2jhsf19hj',
+    message: 'This is a message body',
+     params: [ 'title' => 'This is a title' ]
+);
+```
+
+Optional parameters:
+
+- attachment - a binary image attachment to send with the message (documentation)
+- attachment_base64 - a Base64-encoded image attachment to send with the message (documentation)
+- attachment_type - the MIME type of the included attachment or attachment_base64 (documentation)
+- device - the name of one of your devices to send just to that device instead of all devices (documentation)
+- html - set to 1 to enable HTML parsing (documentation)
+- priority - a value of -2, -1, 0 (default), 1, or 2 (documentation)
+- sound - the name of a supported sound to override your default sound choice (documentation)
+- timestamp - a Unix timestamp of a time to display instead of when our API received it (documentation)
+- title - your message's title, otherwise your app's name is used
+- ttl - a number of seconds that the message will live, before being deleted automatically (documentation)
+- url - a supplementary URL to show with your message (documentation)
+- url_title - a title for the URL specified as the url parameter, otherwise just the URL is shown (documentation)
+
+#### Get (Untested)
+
+```php
+$output = $client->message->get(
+    secret: 'KJHd7hsjqk3jh',
+    device_id: 'kljshdf62j10'
+);
+```
+
+### Receipts
+
+https://pushover.net/api/receipts
+
+#### Get (Untested)
+
+```php
+$output = $client->receipts->get( receipt: 'JKHk1262jhfs' );
+```
+
+#### Cancel (Untested)
+
+
+An emergency-priority notification will continue to be sent to devices until it reaches its original expire value. To cancel an emergency-priority notification early, you can send a POST request to our API.
+
+```php
+$output = $client->receipts->cancel( receipt: 'JKHk1262jhfs' );
+```
+
+#### Cancel by tag (Untested)
+
+```php
+$output = $client->receipts->cancelByTag( tag: 'MyTag' );
+```
+
+#### Acknowledge (Untested)
+
+```php
+$output = $client->receipts->acknowledge(
+    receipt: 'KJHd7hsjqk3jh',
+    secret: 'JKHk1262jhfs'
+);
+```
+
+### Subscriptions
+
+https://pushover.net/api/subscriptions
+
+#### Migrate (Untested)
+
+```php
+$output = $client->subscriptions->migrate(
+    subscription: 'kjh234jhf8',
+            user: 'VB2bc34nfgg'
+);
+```
+
+Parameters:
+
+- subscription (required) - your subscription's code
+- user (required) - the user's Pushover user key
+- device_name (optional) - a user's device name that the subscription should be limited to
+- sound (optional) - a user's preferred default sound
+
 ### Teams
 
-```
-$teams = new Teams();
-```
+https://pushover.net/api/teams
 
-#### addUser
+#### Show (Tested)
 
-Add a user to the team.
-
-* email (required)
-* params (optional parameters)
-  * name
-  * password
-  * instant
-  * admin
-  * group
-
-```
-$output = $teams->addUser( email: 'test@test.com', params: [ admin => true ] );
+```php
+$output = $client->teams->show( team: 'kjh234he8hhj' );
 ```
 
-#### removeUser
+#### Add User (Untested)
 
-Remove a user from the team.
-
-* email (required)
-
+```php
+$output = $client->teams->add(
+    email: 'test@test.com',
+    params: []
+);
 ```
-$output = $teams->removeUser( email: 'test@test.com' );
+
+#### Remove User (Untested)
+
+```php
+$output = $client->teams->remove(
+    email: 'test@test.com'
+);
+```
+
+### Users
+
+#### Validate (Tested)
+
+https://pushover.net/api#validate
+
+As an optional step in collecting user keys for users of your application, you may validate those keys to ensure that a user has copied them properly, that the account is valid, and that there is at least one active device on the account.
+
+```php
+$output = $client->users->validate();
+```
+
+#### Login
+
+```php
+$output = $client->users->login(
+    email: 'test@test.com',
+    password: 'mypassword123'
+);
 ```

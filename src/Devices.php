@@ -12,6 +12,9 @@ readonly class Devices
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param Client $client Pushover PHP Client.
+     */
     public function __construct( private Client $client) {}
 
 
@@ -44,6 +47,7 @@ readonly class Devices
     }
 
 
+
 /* DELETE A DEVICE
 ----------------------------------------------------------------------------- */
 
@@ -52,14 +56,14 @@ readonly class Devices
      *
      * @param string $device_id ID of device to delete messages for.
      * @param string $secret User session secret.
-     * @param string $message ID of last message to keep.
+     * @param int $message ID of last message to keep.
      * @return object|string API server response.
      * @throws GuzzleException
      */
     public function delete(
         string $device_id,
         string $secret,
-        string $message,
+           int $message,
     ) : object | string
     {
         $uri = "devices/{$device_id}/update_highest_message." . $this->client->format;

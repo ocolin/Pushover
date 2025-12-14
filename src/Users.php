@@ -12,6 +12,9 @@ readonly class Users
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param Client $client Pushover PHP Client.
+     */
     public function __construct( private Client $client ) {}
 
 

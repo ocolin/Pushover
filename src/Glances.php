@@ -12,6 +12,9 @@ readonly class Glances
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param Client $client Pushover PHP Client.
+     */
     public function __construct( private Client $client ) {}
 
 
@@ -23,8 +26,8 @@ readonly class Glances
      * To send an update to your widget,
      *
      * @param string $user User key to update.
-     * @param array<string, string|int|float> $params Optional parameters. At least one is needed, such
-     * as the text field.
+     * @param array<string, string|int|float> $params Optional parameters.
+     * At least one is needed, such as the text field.
      * @return object|string
      * @throws GuzzleException
      */

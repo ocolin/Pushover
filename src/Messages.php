@@ -6,16 +6,19 @@ namespace Ocolin\Pushover;
 
 use GuzzleHttp\Exception\GuzzleException;
 
-readonly class Message
+readonly class Messages
 {
 
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param Client $client Pushover PHP Client.
+     */
     public function __construct( private Client $client ) {}
 
 
-/*
+/* PUSH MESSAGE
 ----------------------------------------------------------------------------- */
 
     /**

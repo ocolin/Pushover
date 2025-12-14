@@ -93,8 +93,7 @@ class HTTP
         if( gettype( $query ) === 'object' ) {
             $query = (array)$query;
         }
-        echo $this->token;
-        $query['token'] = $this->token;
+        if( empty( $query['token'])) { $query['token'] = $this->token; }
 
         return $this->format_Response( response: $this->client->get(
             uri: $this->endpoint, options: ['query' => $query ]

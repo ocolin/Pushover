@@ -12,6 +12,9 @@ readonly class Teams
 /* CONSTRUCTOR
 ----------------------------------------------------------------------------- */
 
+    /**
+     * @param Client $client Pushover PHP Client.
+     */
     public function __construct( private Client $client ) {}
 
 
@@ -24,11 +27,12 @@ readonly class Teams
      * @return object|string API server response.
      * @throws GuzzleException
      */
-    public function show() : object | string
+    public function show( string $token ) : object | string
     {
         $uri = 'teams.' . $this->client->format;
+        $query['token'] = $token;
 
-        return $this->client->http->get( uri: $uri )->body;
+        return $this->client->http->get( uri: $uri, query: $query )->body;
     }
 
 

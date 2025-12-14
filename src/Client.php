@@ -64,9 +64,9 @@ class Client
 /* MESSAGE CALLS
 ----------------------------------------------------------------------------- */
 
-    public function message() : Message
+    public function messages() : Messages
     {
-        return new Message( client: $this );
+        return new Messages( client: $this );
     }
 
 
