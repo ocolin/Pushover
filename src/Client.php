@@ -104,4 +104,14 @@ class Client
     {
         return new Users( client: $this );
     }
+
+
+
+/* SOUNDS CALLS
+----------------------------------------------------------------------------- */
+
+    public function sounds() : Sounds
+    {
+        return new Sounds( client: $this );
+    }
 }

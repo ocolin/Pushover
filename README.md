@@ -2,6 +2,7 @@
 
 A PHP client for Pushover API. This is a work in progress, adding testing as endpoints are used and time allows. Each endpoint is labeled whether it has been tested yet or not in this document.
 
+Push message attachments not done yet.
 
 ## Environment Variables
 

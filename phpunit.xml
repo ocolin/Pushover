@@ -14,7 +14,8 @@
 <!--            <file>tests/UserTest.php</file>-->
 <!--            <file>tests/GroupTest.php</file>-->
 <!--            <file>tests/TeamsTest.php</file>-->
-            <file>tests/LicensesTest.php</file>
+<!--            <file>tests/LicensesTest.php</file>-->
+            <file>tests/SoundsTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
