@@ -2,8 +2,6 @@
 
 A PHP client for Pushover API. This is a work in progress, adding testing as endpoints are used and time allows. Each endpoint is labeled whether it has been tested yet or not in this document.
 
-Push message attachments not done yet.
-
 ## Environment Variables
 
 There are two environment variables that can be used instead of arguments when instantiating a new Client object. See .env.example file.
@@ -316,4 +314,24 @@ $output = $client->users->login(
     email: 'test@test.com',
     password: 'mypassword123'
 );
+```
+
+### Sounds
+
+#### List (Tested)
+
+List available alert sounds.
+
+```php
+$output = $client->sounds->list();
+```
+
+### Limits
+
+#### Get (Tested)
+
+Get API limit information.
+
+```php
+$output = $client->limits->get();
 ```

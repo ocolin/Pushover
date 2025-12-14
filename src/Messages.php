@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
 
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
 readonly class Messages
@@ -27,6 +28,7 @@ readonly class Messages
      * @param array<string, string|int|float> $params Optional parameters.
      * @return object|string
      * @throws GuzzleException
+     * @throws Exception
      */
     public function push(
         string $user,
@@ -38,8 +40,13 @@ readonly class Messages
         $params['user']    = $user;
         $params['message'] = $message;
 
+        if( !empty( $params['attachment'] )) {
+            return $this->client->http->multipart( uri: $uri, params: $params )->body;
+        }
+
         return $this->client->http->post( uri: $uri, params: $params )->body;
     }
+
 
 
 /* GET MESSAGES

@@ -114,4 +114,14 @@ class Client
     {
         return new Sounds( client: $this );
     }
+
+
+
+/* LIMIT CALLS
+----------------------------------------------------------------------------- */
+
+    public function limits() : Limits
+    {
+        return new Limits( client: $this );
+    }
 }

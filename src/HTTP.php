@@ -6,9 +6,11 @@ namespace Ocolin\Pushover;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use Ocolin\GlobalType\GT;
+use Exception;
 
 class HTTP
 {
@@ -59,7 +61,9 @@ class HTTP
     )
     {
         $this->token  = $token ?? GT::envString( name: 'PUSHOVER_API_TOKEN' );
-        $this->url    = $url   ?? GT::envString( name: 'PUSHOVER_API_URL' );
+        $this->url    = $url
+            ?? GT::envStringNull( name: 'PUSHOVER_API_URL' )
+            ?? 'https://api.pushover.net/1/';
         $this->format = $format;
 
         $this->client = new Client([
@@ -126,12 +130,60 @@ class HTTP
     }
 
 
-/*
+
+/* POST ATTACHMENT REQUEST
 ----------------------------------------------------------------------------- */
 
     /**
-     * @param ResponseInterface $response
-     * @return Response
+     * @param string $uri API endpoint URI.
+     * @param array<string, string|int|float>|object $params POST parameters to send.
+     * @return Response API server response.
+     * @throws Exception
+     * @throws GuzzleException
+     */
+    public function multipart( string $uri, array|object $params = [] ): Response
+    {
+        $this->endpoint = $uri;
+        $this->trim_Path();
+        if( gettype( $params ) === 'object' ) {
+            $params = (array)$params;
+        }
+        $params['token'] = $this->token;
+
+        if( empty( $params['attachment'])) {
+            throw new Exception(
+                message: 'Attachment function requires attachment field.'
+            );
+        }
+        $multipart = [];
+        foreach( $params as $key => $value ) {
+            if( $key === 'attachment' ) {
+                $multipart[] = [
+                    'name'     => $key,
+                    'contents' => Utils::tryFopen( filename: $value, mode: 'r' )
+                ];
+            }
+            else {
+                $multipart[] = [
+                    'name'     => $key,
+                    'contents' => $value
+                ];
+            }
+        }
+
+        return $this->format_Response( response: $this->client->post(
+            uri: $this->endpoint, options: [ 'multipart' => $multipart ]
+        ));
+    }
+
+
+
+/* FORMAT API HTTP RESPONSE
+----------------------------------------------------------------------------- */
+
+    /**
+     * @param ResponseInterface $response Guzzle HTTP response.
+     * @return Response Formatted API response.
      */
     public function format_Response( ResponseInterface $response ): Response
     {

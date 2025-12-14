@@ -7,26 +7,18 @@ namespace Ocolin\Pushover\Tests;
 use Ocolin\Pushover\Client;
 use PHPUnit\Framework\TestCase;
 
-class MessageTest extends TestCase
+class LimitsTest extends TestCase
 {
     public static Client $client;
 
-    public function testPushMessage() : void
+    public function testList() : void
     {
-        $output = self::$client->messages()->push(
-            user: $_ENV['TEST_USER'],
-            message: "This is a test message",
-            params: [
-                'title' => 'This is a title',
-                'attachment' => __DIR__ . '/1px.jpg'
-            ]
-        );
+        $output = self::$client->limits()->get();
         print_r( $output );
         self::assertIsObject( $output );
         self::assertObjectHasProperty( 'status', $output );
         self::assertObjectHasProperty( 'request', $output );
         self::assertEquals( 1, $output->status );
-
     }
 
     public static function setUpBeforeClass(): void
