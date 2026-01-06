@@ -17,7 +17,7 @@ class GroupTest extends TestCase
     public function testGetGroups() : void
     {
         $output = self::$client->groups()->groups();
-        print_r( $output );
+        //print_r( $output );
         self::assertIsObject( $output );
         self::assertObjectHasProperty( 'groups', $output );
         self::assertObjectHasProperty( 'request', $output );
@@ -38,17 +38,17 @@ class GroupTest extends TestCase
         self::assertObjectHasProperty( 'status', $output );
         self::assertEquals( 1, $output->status );
     }
-
+*/
 
     public function testGetGroup() : void
     {
         $output = self::$client->groups()->get( $_ENV['TEST_GROUP'] );
-        //print_r( $output );
+        print_r( $output );
         self::assertIsObject( $output );
         self::assertObjectHasProperty( 'status', $output );
         self::assertEquals( 1, $output->status );
     }
-
+/*
     public function testAddUser() : void
     {
         $output = self::$client->groups()->addUser(

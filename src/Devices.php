@@ -49,7 +49,7 @@ readonly class Devices
         $params = [
             'secret' => $secret,
             'name'   => $name,
-            'os'      => $os
+            'os'     => $os
         ];
 
         return $this->client->http->post( uri: $uri, params: $params )->body;

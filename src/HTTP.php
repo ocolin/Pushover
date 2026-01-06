@@ -13,13 +13,20 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Pushover;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
+use GuzzleHttp\Psr7\Utils;
 use Ocolin\GlobalType\GT;
+use GuzzleHttp\Client;
+use stdClass;
 use Exception;
+
+use function is_object;
+use function is_string;
+use function json_decode;
+use function str_starts_with;
+use function str_ends_with;
+use function trim;
 
 class HTTP
 {
@@ -96,7 +103,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $query ) === 'object' ) { $query = (array)$query; }
+        if( is_object( value: $query )) { $query = (array)$query; }
         if( empty( $query['token'])) { $query['token'] = $this->token; }
 
         return $this->format_Response( response: $this->client->get(
@@ -121,7 +128,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $params ) === 'object' ) { $params = (array)$params; }
+        if( is_object( $params )) { $params = (array)$params; }
         $params['token'] = $this->token;
 
         return $this->format_Response( response: $this->client->post(
@@ -147,7 +154,7 @@ class HTTP
     {
         $this->endpoint = $uri;
         $this->trim_Path();
-        if( gettype( $params ) === 'object' ) { $params = (array)$params; }
+        if( is_object( value: $params )) { $params = (array)$params; }
         $params['token'] = $this->token;
 
         if( empty( $params['attachment'])) {
@@ -216,7 +223,7 @@ class HTTP
     {
         if(
             str_starts_with( haystack: $this->endpoint, needle: '/' ) AND
-            str_ends_with( haystack: self::API_URL, needle: '/' )
+              str_ends_with( haystack: self::API_URL, needle: '/' )
         ) {
             $this->endpoint =  trim( string: $this->endpoint, characters: '/' );
         }

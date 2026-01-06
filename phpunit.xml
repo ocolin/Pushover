@@ -12,7 +12,7 @@
 <!--            <file>tests/HttpGetTest.php</file>-->
 <!--            <file>tests/MessageTest.php</file>-->
 <!--            <file>tests/UserTest.php</file>-->
-<!--            <file>tests/GroupTest.php</file>-->
+            <file>tests/GroupTest.php</file>
 <!--            <file>tests/TeamsTest.php</file>-->
 <!--            <file>tests/LicensesTest.php</file>-->
 <!--            <file>tests/SoundsTest.php</file>-->
